@@ -32,11 +32,14 @@ jobs:
         run: |
           commit_message="${{ steps.get_commit_message.outputs.message }}"
           version=$(echo "$commit_message" | grep -oP '\[version: v\d+\.\d+\.\d+\]' | grep -oP 'v\d+\.\d+\.\d+')
-          echo "Extracted version: $version"
-          sed -i "s/\(version: \)[0-9.]\+/\1$version/" version.txt
 
-      - name: Commit and push new migration files
-        run: |
-          git add .
-          git commit -m "version update" 
-          git push origin master
+          # Check if version exists
+          if [ -n "$version" ]; then
+            echo "Extracted version: $version"
+            sed -i "s/\(version: \)[0-9.]\+/\1$version/" version.txt
+            git add .
+            git commit -m "version update" 
+            git push origin master
+          else
+            echo "Version not found in commit message. Skipping additional commands."
+          fi
