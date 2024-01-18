@@ -33,7 +33,7 @@ jobs:
           commit_message="${{ steps.get_commit_message.outputs.message }}"
           version=$(echo "$commit_message" | grep -oP '\[version: v\d+\.\d+\.\d+\]' | grep -oP 'v\d+\.\d+\.\d+')
           echo "Extracted version: $version"
-          echo "version: $version" >> version.txt
+          sed -i "s/\(version: \)[0-9.]\+/\1$version/" version.txt
 
       - name: Commit and push new migration files
         run: |
