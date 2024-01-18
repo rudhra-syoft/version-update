@@ -31,7 +31,7 @@ jobs:
         id: extract_version
         run: |
           commit_message="${{ steps.get_commit_message.outputs.message }}"
-          version=$(echo "$commit_message" | grep -oP '\[version: \K[^\]]+(?=\])')
+          version=$(echo "$commit_message" | grep -oP '\[version: \K[^\]]+(?=\])') || true
 
           # Check if version exists
           if [ -n "$version" ]; then
