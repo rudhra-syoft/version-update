@@ -1,0 +1,39 @@
+name: version update
+
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  migrate_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Get last commit message
+        id: get_commit_message
+        run: echo "::set-output name=message::$(git log --format=%B -n 1)"
+
+      - name: Extract version from commit message
+        id: extract_version
+        run: |
+          commit_message="${{ steps.get_commit_message.outputs.message }}"
+          version=$(echo "$commit_message" | grep -oP '\[version: v\d+\.\d+\.\d+\]' | grep -oP 'v\d+\.\d+\.\d+')
+          echo "Extracted version: $version"
+
+      - name: Use the extracted version in your workflow
+        run: |
+          # Now you can use the $version variable in your workflow
+          echo "Version extracted from commit message: ${{ steps.extract_version.outputs.version }}"
