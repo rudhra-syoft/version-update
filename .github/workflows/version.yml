@@ -36,7 +36,7 @@ jobs:
           # Check if version exists
           if [ -n "$version" ]; then
             echo "Extracted version: $version"
-            sed -i "s/\(version: \)[0-9.]\+/\1$version/" version.txt
+            sed -i "s/\(version: \)[^\n]*/\1$version/" version.txt
             echo "---------"
             git status
             git add .
