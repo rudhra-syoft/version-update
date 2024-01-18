@@ -37,9 +37,11 @@ jobs:
           if [ -n "$version" ]; then
             echo "Extracted version: $version"
             sed -i "s/\(version: \)[0-9.]\+/\1$version/" version.txt
+            echo "---------"
+            git status
             git add .
-            git commit -m "version update" 
-            git push origin master
+            git commit -m "version update" || true
+            git push origin master || true
           else
             echo "Version not found in commit message. Skipping additional commands."
           fi
