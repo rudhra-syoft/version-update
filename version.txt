@@ -1,1 +1,3 @@
+author: joe
 version: v1.1.9
+compatiblity: mac
